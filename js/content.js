@@ -1,14 +1,18 @@
-var LINKT_TO_OPEN = 5;
-
+var LINK_TO_OPEN = 5;
 
 chrome.extension.onMessage.addListener(function(message, sender, _sendResponse){
   if(message.action == "showInput"){
-    showInput(_sendResponse);
+    if ($('#open_first_tabs_extension').length > 0) {
+      $('#open_first_tabs_extension').remove();
+      deleteBgShadow();
+    }else{
+      showInput(_sendResponse);
+    }
   }else if (message.action == "parseFirstLinks"){
     var checkExist = setInterval(function() {
-      if ($('.g .r a').length > LINKT_TO_OPEN) {
+      if ($('.g .r a').length > LINK_TO_OPEN) {
         clearInterval(checkExist);
-        _sendResponse({ links: parseFirstLinks(LINKT_TO_OPEN) })
+        _sendResponse({ links: parseFirstLinks(LINK_TO_OPEN) });
       }
     }, 300);
   } else{
@@ -19,26 +23,48 @@ chrome.extension.onMessage.addListener(function(message, sender, _sendResponse){
 
 function showInput(sendResponse) {
   element = $('<input/>', {
-    id: 'open_first_tabs',
+    id: 'open_first_tabs_extension',
     title: 'Become a Googler',
     rel: 'external',
     text: 'Go to Google!'
   }).css({
-    left: $(document).width() / 4,
-    top: $(document).height() / 32,
-    position: 'absolute',
-    width: $(document).width() / 2,
-    height: $(document).height() / 32
+    left: "40%",
+    top: "40%",
+    position: 'fixed',
+    width: "300px",
+    height: "30px",
+    zIndex: 1024
   }).bind("enterKey", function (e) {
     text = $(this).val();
     $(this).remove();
+    deleteBgShadow();
     sendResponse({query: text });
   }).keyup(function (e) {
     if (e.keyCode == 13)
       $(this).trigger("enterKey");
   }).appendTo('body');
 
+  addBgShadow();
   element.focus();
+}
+
+function addBgShadow(){
+  $('<div/>', {
+    id: 'open_first_tabs_extension_bg_shadow'
+  }).css({
+    left: "0",
+    top: "0",
+    position: 'fixed',
+    width: "100%",
+    height: "100%",
+    backgroundColor: 'black',
+    opacity: 0.5,
+    zIndex: 1023
+  }).appendTo('body');
+}
+
+function deleteBgShadow(){
+  $('#open_first_tabs_extension_bg_shadow').remove();
 }
 
 function parseFirstLinks(n){
@@ -54,7 +80,7 @@ function parseFirstLinks(n){
 
   elements.each(function(){
     if (i>=n) return;
-    i++
+    i++;
     pure_link = $(this).attr('href').split('url=');
 
     if(isNotCorrect(pure_link)) return;

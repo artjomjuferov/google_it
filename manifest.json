@@ -20,15 +20,10 @@
       "matches": ["http://*/*", "https://*/*"],
       "js": [
         "js/vendor/jquery.js.min",
-//        "js/vendor/underscore.js.min",
         "js/content.js"
       ]
     }
   ],
-  "icons": {
-//    "16": "images/icon-16x16.png",
-//    "128": "images/icon-128x128.png"
-  },
   "commands": {
     "search" : {
       "suggested_key": {
@@ -36,22 +31,5 @@
       },
       "description": "Open first links"
     }
-  },
-  "platforms": [
-//    {
-//      "nacl_arch": "x86-64",
-//      "sub_package_path": "_platform_specific/x86-64/"
-//    },
-//    {
-//      "nacl_arch": "x86-32",
-//      "sub_package_path": "_platform_specific/x86-32/"
-//    },
-//    {
-//      "nacl_arch": "arm",
-//      "sub_package_path": "_platform_specific/arm/"
-//    },
-//    {
-//      "sub_package_path": "_platform_specific/all/"
-//    }
-  ]
+  }
 }

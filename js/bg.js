@@ -14,7 +14,7 @@ chrome.commands.onCommand.addListener(function (command) {
                 function(response) {
                   var links = response.links;
                   if (links.length > 0 ){
-                    for (var i=links.length-1; i>=0 ; i--){
+                    for (var i=0; i<links.length ; i++){
                       chrome.tabs.create({ url: links[i]});
                     }
                   }

@@ -1,27 +1,47 @@
 var LINK_TO_OPEN = 5;
 
 chrome.extension.onMessage.addListener(function(message, sender, _sendResponse){
-  if(message.action == "showInput"){
-    if ($('#open_first_tabs_extension').length > 0) {
-      $('#open_first_tabs_extension').remove();
-      deleteBgShadow();
-    }else{
-      showInput(_sendResponse);
-    }
-  }else if (message.action == "parseFirstLinks"){
-    var checkExist = setInterval(function() {
-      if ($('.g .r a').length > LINK_TO_OPEN) {
-        clearInterval(checkExist);
-        _sendResponse({ links: parseFirstLinks(LINK_TO_OPEN) });
-      }
-    }, 300);
-  } else{
-    return false
-  }
+  var isAlreadyOpened = alreadyOpened(message.action);
+  if(message.action == "showInput" && isAlreadyOpened)
+    deleteAll();
+  else if(message.action == "showInput" && !isAlreadyOpened)
+    addAll(_sendResponse);
+  else if (message.action == "parseFirstLinks")
+    startCheckingTabs(_sendResponse, LINK_TO_OPEN);
+  else return false;
+
   return true;
 });
 
-function showInput(sendResponse) {
+function alreadyOpened(actionName){
+  return actionName == "showInput" ? ($('#open_first_tabs_extension').length > 0) : false
+}
+
+function startCheckingTabs(sendResponse, tabsAmount){
+  var checkExist = setInterval(function() {
+    if (appearedEnoughTabs(tabsAmount)) {
+      clearInterval(checkExist);
+      sendResponse({ links: parseFirstLinks(tabsAmount) });
+    }
+  }, 300);
+}
+
+function appearedEnoughTabs(tabsCount){
+  return ($('.g .r a').length > tabsCount);
+}
+
+
+function addAll(sendResponse){
+  AddInput(sendResponse);
+  addBgShadow();
+}
+
+function deleteAll(){
+  deleteInput();
+  deleteBgShadow();
+}
+
+function AddInput(sendResponse) {
   element = $('<input/>', {
     id: 'open_first_tabs_extension',
     title: 'Become a Googler',
@@ -36,17 +56,18 @@ function showInput(sendResponse) {
     zIndex: 1024
   }).bind("enterKey", function (e) {
     text = $(this).val();
-    $(this).remove();
-    deleteBgShadow();
+    deleteAll();
     sendResponse({query: text });
   }).keyup(function (e) {
     if (e.keyCode == 13)
       $(this).trigger("enterKey");
   }).appendTo('body');
-
-  addBgShadow();
   element.focus();
 }
+function deleteInput(){
+  $('#open_first_tabs_extension').remove();
+}
+
 
 function addBgShadow(){
   $('<div/>', {
@@ -62,10 +83,10 @@ function addBgShadow(){
     zIndex: 1023
   }).appendTo('body');
 }
-
 function deleteBgShadow(){
   $('#open_first_tabs_extension_bg_shadow').remove();
 }
+
 
 function parseFirstLinks(n){
 

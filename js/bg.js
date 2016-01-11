@@ -4,35 +4,6 @@ chrome.commands.onCommand.addListener(function (command) {
   }
 });
 
-
-function responseFromHotKeyPressed(response){
-  var baseUrl = "https://www.google.ru/webhp?hl=en#newwindow=1&hl=en-RU&q=";
-  chrome.tabs.create(
-    { url: baseUrl+ response.query},
-    function(activeTab){
-
-      var sendParseFirstLinks = function (tabId, changeInfo, tab) {
-        if (changeInfo.status == 'complete' && activeTab.id === tabId) {
-          chrome.tabs.sendMessage(
-            activeTab.id,
-            {action: "parseFirstLinks"},
-            function(response) {
-              var links = response.links;
-              if (links.length > 0 ){
-                for (var i=0; i<links.length ; i++){
-                  chrome.tabs.create({ url: links[i]});
-                }
-              }
-              chrome.tabs.onUpdated.removeListener(sendParseFirstLinks);
-            }
-          );
-        }
-      };
-      chrome.tabs.onUpdated.addListener(sendParseFirstLinks)
-    }
-  );
-}
-
 function afterHotKeyPressedSend(actionName, responseFunction){
   chrome.tabs.query(
     {active: true, currentWindow: true},
@@ -44,6 +15,37 @@ function afterHotKeyPressedSend(actionName, responseFunction){
     }
   );
 }
+
+function responseFromHotKeyPressed(response){
+  openGooglePage(response.query)
+}
+
+function openGooglePage(searchQuery){
+  var baseUrl = "https://www.google.ru/webhp?hl=en#newwindow=1&hl=en-RU&q=";
+  chrome.tabs.create({ url: baseUrl+ searchQuery}, afterGooglePageOpened);
+}
+
+function afterGooglePageOpened(activeTab){
+  var sendParseFirstLinks = function (tabId, changeInfo, tab) {
+    if (changeInfo.status == 'complete' && activeTab.id === tabId) {
+      chrome.tabs.sendMessage(
+        activeTab.id,
+        {action: "parseFirstLinks"},
+        function(response) {
+          var links = response.links;
+          if (links.length > 0 ){
+            for (var i=0; i<links.length ; i++){
+              chrome.tabs.create({ url: links[i]});
+            }
+          }
+          chrome.tabs.onUpdated.removeListener(sendParseFirstLinks);
+        }
+      );
+    }
+  };
+  chrome.tabs.onUpdated.addListener(sendParseFirstLinks)
+}
+
 
 
 

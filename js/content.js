@@ -49,7 +49,7 @@ function AddInput(sendResponse) {
     left: "40%",
     top: "40%",
     position: 'fixed',
-    width: "300px",
+    width: "500px",
     height: "60px",
     fontSize: 24,
     zIndex: 1024

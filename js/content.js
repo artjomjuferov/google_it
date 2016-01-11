@@ -2,9 +2,9 @@ var LINK_TO_OPEN = 5;
 
 chrome.extension.onMessage.addListener(function(message, sender, _sendResponse){
   var isAlreadyOpened = alreadyOpened(message.action);
-  if(message.action == "showInput" && isAlreadyOpened)
+  if(message.action == "hotKeyPressed" && isAlreadyOpened)
     deleteAll();
-  else if(message.action == "showInput" && !isAlreadyOpened)
+  else if(message.action == "hotKeyPressed" && !isAlreadyOpened)
     addAll(_sendResponse);
   else if (message.action == "parseFirstLinks")
     startCheckingTabs(_sendResponse, LINK_TO_OPEN);
@@ -14,7 +14,7 @@ chrome.extension.onMessage.addListener(function(message, sender, _sendResponse){
 });
 
 function alreadyOpened(actionName){
-  return actionName == "showInput" ? ($('#open_first_tabs_extension').length > 0) : false
+  return actionName == "hotKeyPressed" ? ($('#open_first_tabs_extension').length > 0) : false
 }
 
 function startCheckingTabs(sendResponse, tabsAmount){
@@ -44,15 +44,14 @@ function deleteAll(){
 function AddInput(sendResponse) {
   element = $('<input/>', {
     id: 'open_first_tabs_extension',
-    title: 'Become a Googler',
-    rel: 'external',
-    text: 'Go to Google!'
+    placeholder: 'Enter google query'
   }).css({
     left: "40%",
     top: "40%",
     position: 'fixed',
     width: "300px",
-    height: "30px",
+    height: "60px",
+    fontSize: 24,
     zIndex: 1024
   }).bind("enterKey", function (e) {
     text = $(this).val();
@@ -79,7 +78,7 @@ function addBgShadow(){
     width: "100%",
     height: "100%",
     backgroundColor: 'black',
-    opacity: 0.5,
+    opacity: 0.7,
     zIndex: 1023
   }).appendTo('body');
 }
@@ -89,7 +88,6 @@ function deleteBgShadow(){
 
 
 function parseFirstLinks(n){
-
   elements = $('.g .r a');
 
   if (elements.length < n)
@@ -102,6 +100,7 @@ function parseFirstLinks(n){
   elements.each(function(){
     if (i>=n) return;
     i++;
+
     pure_link = $(this).attr('href').split('url=');
 
     if(isNotCorrect(pure_link)) return;
@@ -115,11 +114,10 @@ function parseFirstLinks(n){
     links.push(pure_link);
   });
 
-  console.log(links);
   return links;
 }
 
 
 function isNotCorrect(obj){
-  return obj == undefined || obj == "undefined" || obj == null || obj == null;
+  return obj == undefined || obj == "undefined" || obj == null;
 }

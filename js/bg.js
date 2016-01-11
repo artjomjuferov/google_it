@@ -28,23 +28,57 @@ function thenSendMessageToParseLinks(activeTab){
       chrome.tabs.sendMessage(
         activeTab.id,
         {action: "parseFirstLinks"},
-        thenOpenParsedLinks
+        function(response){
+          var links = response.links;
+          var tabs = [];
+          if (links.length > 0 ){
+            for (var i=0; i<links.length ; i++){
+              chrome.tabs.create({
+                url: links[i]},
+                function(activeTab){
+                  tabs.push(activeTab.id);
+                }
+              );
+            }
+          }
+          // it is good idea to switch on first loaded tab
+          switchOnFirstLoadedTab(tabs);
+
+          // after tabs created we remove listener to prevent creating new
+          chrome.tabs.onUpdated.removeListener(sendMessageToParseLinks);
+        }
       );
     }
   };
   chrome.tabs.onUpdated.addListener(sendMessageToParseLinks)
 }
 
-
-function thenOpenParsedLinks(response){
-  var links = response.links;
-  if (links.length > 0 ){
-    for (var i=0; i<links.length ; i++){
-      chrome.tabs.create({ url: links[i]});
+function switchOnFirstLoadedTab(tabs){
+  var loaded = function (tabId, changeInfo, tab) {
+    if (changeInfo.status == 'complete' && exist(tabs, tabId)) {
+      selectTab(tabId);
+      chrome.tabs.onUpdated.removeListener(loaded);
     }
-  }
-  chrome.tabs.onUpdated.removeListener(sendMessageToParseLinks);
+  };
+  chrome.tabs.onUpdated.addListener(loaded)
 }
+
+function exist(arr, id){
+  for(var i=0; i<arr.length; i++){
+    if (arr[i] == id)
+      return true;
+  }
+  return false;
+}
+
+function selectTab(tabId){
+  chrome.tabs.update(tabId, {selected: true});
+}
+
+//
+//function thenOpenParsedLinks(response){
+//
+//}
 
 
 

@@ -46,10 +46,10 @@ function AddInput(sendResponse) {
     id: 'open_first_tabs_extension',
     placeholder: 'Enter google query'
   }).css({
-    left: "40%",
+    left: "30%",
     top: "40%",
     position: 'fixed',
-    width: "500px",
+    width: "600px",
     height: "60px",
     fontSize: 24,
     zIndex: 1024

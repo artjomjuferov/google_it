@@ -29,7 +29,13 @@
       "suggested_key": {
         "default": "Ctrl+Shift+K"
       },
-      "description": "Open first links"
+      "description": "Open input to enter with the key words"
+    },
+    "close": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+L"
+      },
+      "description": "Close all opened tabs within last search"
     }
   }
 }

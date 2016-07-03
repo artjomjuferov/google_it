@@ -1,10 +1,12 @@
 chrome.commands.onCommand.addListener(function (command) {
   if (command === "search") {
-    afterHotKeyPressedSend("hotKeyPressed", thenOpenGooglePage);
+    afterSearchPressedSend("searchPressed", thenOpenGooglePage);
+  } else if (command === "close") {
+
   }
 });
 
-function afterHotKeyPressedSend(actionName, responseFunction){
+function afterSearchPressedSend(actionName, responseFunction){
   chrome.tabs.query(
     {active: true, currentWindow: true},
     function(tabs){
@@ -79,10 +81,3 @@ function selectTab(tabId){
 //function thenOpenParsedLinks(response){
 //
 //}
-
-
-
-
-
-
-

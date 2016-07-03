@@ -2,19 +2,20 @@ var LINK_TO_OPEN = 5;
 
 chrome.extension.onMessage.addListener(function(message, sender, _sendResponse){
   var isAlreadyOpened = alreadyOpened(message.action);
-  if(message.action == "hotKeyPressed" && isAlreadyOpened)
+  if(message.action == "searchPressed" && isAlreadyOpened){
     deleteAll();
-  else if(message.action == "hotKeyPressed" && !isAlreadyOpened)
+  }else if(message.action == "searchPressed" && !isAlreadyOpened){
     addAll(_sendResponse);
-  else if (message.action == "parseFirstLinks")
+  }else if (message.action == "parseFirstLinks")
     startCheckingTabs(_sendResponse, LINK_TO_OPEN);
-  else return false;
-
+  }else{
+    return false;
+  }
   return true;
 });
 
 function alreadyOpened(actionName){
-  return actionName == "hotKeyPressed" ? ($('#open_first_tabs_extension').length > 0) : false
+  return actionName == "searchPressed" ? ($('#open_first_tabs_extension').length > 0) : false
 }
 
 function startCheckingTabs(sendResponse, tabsAmount){

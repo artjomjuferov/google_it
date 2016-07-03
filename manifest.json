@@ -1,41 +1,38 @@
 {
-  "name": "Google Quick Search",
-  "description": "This app quickly opens first n tabs from google search engine results",
-  "manifest_version": 2,
-  "minimum_chrome_version": "28",
-  "offline_enabled": true,
-  "version": "0.3",
-  "permissions": [
-    "tabs",
-    "clipboardWrite"
-  ],
-  "background": {
-    "scripts": [
-      "js/bg.js"
-    ]
-  },
-  "content_scripts":
-  [
-    {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": [
-        "js/vendor/jquery.js.min",
-        "js/content.js"
-      ]
-    }
-  ],
-  "commands": {
-    "search" : {
-      "suggested_key": {
-        "default": "Ctrl+K"
-      },
-      "description": "Open input to enter with the key words"
+    "name": "Google Quick Search",
+    "description": "This app quickly opens first n tabs from google search engine results",
+    "manifest_version": 2,
+    "minimum_chrome_version": "28",
+    "offline_enabled": true,
+    "version": "0.3",
+    "permissions": [
+        "tabs",
+        "clipboardWrite"
+    ],
+    "background": {
+        "scripts": [
+            "js/bg.js"
+        ]
     },
-    "close": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+K"
-      },
-      "description": "Close all opened tabs within last search"
+    "content_scripts": [{
+        "matches": ["http://*/*", "https://*/*"],
+        "js": [
+            "js/vendor/jquery.js.min",
+            "js/content.js"
+        ]
+    }],
+    "commands": {
+        "search": {
+            "suggested_key": {
+                "default": "Ctrl+K"
+            },
+            "description": "Open input to enter with the key words"
+        },
+        "close": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+K"
+            },
+            "description": "Close all opened tabs within last search"
+        }
     }
-  }
 }

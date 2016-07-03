@@ -4,6 +4,6 @@ It opens first 5 tabs and then focuses on the first loaded.
 
 | Command     | Action |
 | -           |:-:|
-| Cmd+Shift+K | Show input |
-| Cmd+Shift+K | Hide input |
-| Cmd+Shift+L | Close opended tabs |
+| Cmd+K | Show input |
+| Cmd+K | Hide input |
+| Cmd+Shift+K | Close opended tabs |

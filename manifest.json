@@ -27,13 +27,13 @@
   "commands": {
     "search" : {
       "suggested_key": {
-        "default": "Ctrl+Shift+K"
+        "default": "Ctrl+K"
       },
       "description": "Open input to enter with the key words"
     },
     "close": {
       "suggested_key": {
-        "default": "Ctrl+Shift+L"
+        "default": "Ctrl+Shift+K"
       },
       "description": "Close all opened tabs within last search"
     }

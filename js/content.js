@@ -6,7 +6,7 @@ chrome.extension.onMessage.addListener(function(message, sender, _sendResponse){
     deleteAll();
   }else if(message.action == "searchPressed" && !isAlreadyOpened){
     addAll(_sendResponse);
-  }else if (message.action == "parseFirstLinks")
+  }else if (message.action == "parseFirstLinks"){
     startCheckingTabs(_sendResponse, LINK_TO_OPEN);
   }else{
     return false;
@@ -14,9 +14,11 @@ chrome.extension.onMessage.addListener(function(message, sender, _sendResponse){
   return true;
 });
 
+
 function alreadyOpened(actionName){
   return actionName == "searchPressed" ? ($('#open_first_tabs_extension').length > 0) : false
 }
+
 
 function startCheckingTabs(sendResponse, tabsAmount){
   var checkExist = setInterval(function() {
@@ -26,6 +28,7 @@ function startCheckingTabs(sendResponse, tabsAmount){
     }
   }, 300);
 }
+
 
 function appearedEnoughTabs(tabsCount){
   return ($('.g .r a').length > tabsCount);
@@ -37,10 +40,12 @@ function addAll(sendResponse){
   addBgShadow();
 }
 
+
 function deleteAll(){
   deleteInput();
   deleteBgShadow();
 }
+
 
 function AddInput(sendResponse) {
   element = $('<input/>', {
@@ -64,6 +69,8 @@ function AddInput(sendResponse) {
   }).appendTo('body');
   element.focus();
 }
+
+
 function deleteInput(){
   $('#open_first_tabs_extension').remove();
 }
@@ -83,6 +90,8 @@ function addBgShadow(){
     zIndex: 1023
   }).appendTo('body');
 }
+
+
 function deleteBgShadow(){
   $('#open_first_tabs_extension_bg_shadow').remove();
 }

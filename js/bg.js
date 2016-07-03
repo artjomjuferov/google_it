@@ -17,8 +17,7 @@ function closeLastSessionOfTabs(){
   if (!tabsToClose){
     return;
   }
-  console.log(tabsToClose);
-  console.log(SESSIONS);
+
   for (var i = 0; i < tabsToClose.length; i++) {
       tabId = tabsToClose[i];
       chrome.tabs.remove(tabId);
@@ -56,7 +55,6 @@ function thenSendMessageToParseLinks(resultsTab){
         resultsTab.id,
         {action: "parseFirstLinks"},
         function(response){
-          // console.log(response)
           if (!response)
             return;
           // all parsed links

@@ -1,0 +1,14 @@
+{
+  "name": "Google it",
+  "version": "0.0.1",
+  "description": "",
+  "main": "test.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register test/*.coffee"
+  },
+  "author": "",
+  "license": "ISC"
+}
